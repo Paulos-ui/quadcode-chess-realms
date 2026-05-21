@@ -7,7 +7,6 @@ A cinematic chess lore explorer built for the **Quadcode AI Hackathon 2026**. Pi
 ![hero](docs/screenshot.png)
 
 ---
-s
 ## ✨ What it does
 
 - **🏛️ Famous Legends Library** : 4 pre-loaded masterpieces with verified PGNs:
