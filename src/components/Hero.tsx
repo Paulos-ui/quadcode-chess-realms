@@ -25,7 +25,7 @@ export function Hero({ onPickGame, onJumpToBrowser, onJumpToBattle }: Props) {
           <a href="#famous" className="hover:text-gold-200 transition">Famous</a>
           <a href="#create" className="hover:text-gold-200 transition">Create</a>
           <a href="#battle" className="hover:text-gold-200 transition">Battle</a>
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-gold-200 transition">GitHub</a>
+          <a href="https://github.com/Paulos-ui/quadcode-chess-realms" target="_blank" rel="noreferrer" className="hover:text-gold-200 transition">GitHub</a>
         </div>
       </div>
 

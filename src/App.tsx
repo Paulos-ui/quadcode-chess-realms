@@ -259,7 +259,7 @@ export default function App() {
                 </button>
               </div>
               <p className="text-[11px] text-gold-200/50 mt-4 font-mono leading-relaxed">
-                ⚠️ Key is sent direct from your browser to the Anthropic API. Use a key with
+                ⚠️ Key is sent direct from your browser to the quodedcode. Use a key with
                 spend limits — never share this URL with your key embedded.
               </p>
             </motion.div>

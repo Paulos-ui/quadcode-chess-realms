@@ -7,22 +7,22 @@ A cinematic chess lore explorer built for the **Quadcode AI Hackathon 2026**. Pi
 ![hero](docs/screenshot.png)
 
 ---
-
+s
 ## ✨ What it does
 
-- **🏛️ Famous Legends Library** — 4 pre-loaded masterpieces with verified PGNs:
+- **🏛️ Famous Legends Library** : 4 pre-loaded masterpieces with verified PGNs:
   - The Immortal Game (Anderssen vs Kieseritzky, 1851)
   - Kasparov vs Deep Blue, Game 6 (1997)
   - The Game of the Century (Byrne vs Fischer, 1956)
-  - **The Jayking Special** 🇳🇬 — a dramatic Légal-style smothered mate
-- **♟️ Paste Any PGN** — drop in a game from your phone, watch it become legend
-- **🎬 Cinematic Lore** — 300–400 word movie-script story generated for every game
-- **💬 Live AI Commentary** — every move gets a one-liner ("The bishop seals the trap…")
-- **🎨 4 Board Realms** — Royal Nigerian, Cyberpunk, Fantasy, Classic — each with custom piece styles
-- **🎵 60-Second Procedural Soundtrack** — tense strings, deep drums, bell climax (Tone.js, fully synthesized in-browser)
-- **📽️ 15-Second Cinematic Video** — slow-motion gameplay with camera shake, scanlines, victory burst — exports as `.webm`
-- **⚔️ Mini Battle Mode** — play against a random-move AI from any position
-- **🎯 Share to X** — pre-filled hype tweet with `#QuadcodeHackathon`
+  - **The Jayking Special** : a dramatic Légal-style smothered mate
+- **♟️ Paste Any PGN** : drop in a game from your phone, watch it become legend
+- **🎬 Cinematic Lore** : 300–400 word movie-script story generated for every game
+- **💬 Live AI Commentary** : every move gets a one-liner ("The bishop seals the trap…")
+- **🎨 4 Board Realms** : Royal UK, Cyberpunk, Fantasy, Classic — each with custom piece styles
+- **🎵 60-Second Procedural Soundtrack** : tense strings, deep drums, bell climax (Tone.js, fully synthesized in-browser)
+- **📽️ 15-Second Cinematic Video** : slow-motion gameplay with camera shake, scanlines, victory burst — exports as `.webm`
+- **⚔️ Mini Battle Mode** : play against a random-move AI from any position
+- **🎯 Share to X** : pre-filled hype tweet with `#QuadcodeHackathon`
 
 ## 🧠 Bring Your Own Key (Optional)
 
