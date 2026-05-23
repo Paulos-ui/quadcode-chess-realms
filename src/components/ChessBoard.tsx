@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { fenToBoard, isCheckFen } from '../lib/chess-utils';
 import type { BoardTheme } from '../types';
 import { PieceGlyph } from '../lib/theme-engine';
@@ -57,7 +57,7 @@ export function ChessBoard({ fen, theme, highlightFrom, highlightTo, draggable, 
     if (!selectedSquare) return { legalDests: new Set<string>(), captureDests: new Set<string>() };
     try {
       const chess = new Chess(fen);
-      const moves = chess.moves({ square: selectedSquare, verbose: true });
+      const moves = chess.moves({ square: selectedSquare as Square, verbose: true });
       const legal = new Set<string>();
       const captures = new Set<string>();
       for (const m of moves) {
