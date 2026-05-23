@@ -462,8 +462,8 @@ function LegendsScreen({ themeName, onThemeChange, onBack }: LegendsScreenProps)
                   theme={theme}
                   highlightFrom={lastMove?.from}
                   highlightTo={lastMove?.to}
-                />
-              </div>
+                  draggable={true}
+              />
               <GameControls game={game} onToggleBattle={() => {}} battleOn={false} />
               <CommentaryFeed game={active} parsed={game.parsed} ply={game.ply} />
             </div>
