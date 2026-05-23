@@ -1,5 +1,6 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Chess } from 'chess.js';
 import { fenToBoard, isCheckFen } from '../lib/chess-utils';
 import type { BoardTheme } from '../types';
 import { PieceGlyph } from '../lib/theme-engine';
@@ -10,7 +11,7 @@ interface Props {
   highlightFrom?: string;
   highlightTo?: string;
   draggable: boolean;
-  onMove?: (from: string, to: string) => boolean;
+  onMove?: (from: string, to: string, promotion?: string) => boolean;
   flipped?: boolean;
 }
 
@@ -41,16 +42,94 @@ export function ChessBoard({ fen, theme, highlightFrom, highlightTo, draggable, 
     return null;
   }, [board, inCheck, fen]);
 
+  const sideToMove = (fen.split(' ')[1] as 'w' | 'b') ?? 'w';
+
+  // Selection state for click-to-move
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+
+  // Clear selection whenever the position changes (move applied, board reset, etc.)
+  useEffect(() => {
+    setSelectedSquare(null);
+  }, [fen]);
+
+  // Legal destinations from the selected square
+  const { legalDests, captureDests } = useMemo(() => {
+    if (!selectedSquare) return { legalDests: new Set<string>(), captureDests: new Set<string>() };
+    try {
+      const chess = new Chess(fen);
+      const moves = chess.moves({ square: selectedSquare, verbose: true });
+      const legal = new Set<string>();
+      const captures = new Set<string>();
+      for (const m of moves) {
+        legal.add(m.to);
+        if (m.captured) captures.add(m.to);
+      }
+      return { legalDests: legal, captureDests: captures };
+    } catch {
+      return { legalDests: new Set<string>(), captureDests: new Set<string>() };
+    }
+  }, [selectedSquare, fen]);
+
+  const pieceAt = (sq: string): string | null => {
+    const fileIdx = FILES.indexOf(sq[0]!);
+    const rankIdx = parseInt(sq[1]!, 10) - 1;
+    if (fileIdx < 0 || rankIdx < 0 || rankIdx > 7) return null;
+    const displayR = 7 - rankIdx;
+    const displayC = fileIdx;
+    return board[displayR][displayC] || null;
+  };
+
+  const isOwnPiece = (piece: string | null): boolean => {
+    if (!piece) return false;
+    return sideToMove === 'w' ? piece === piece.toUpperCase() : piece === piece.toLowerCase();
+  };
+
+  const handleSquareClick = (sq: string) => {
+    if (!draggable) return;
+
+    const piece = pieceAt(sq);
+
+    // Already have a selection?
+    if (selectedSquare) {
+      // Clicked the same square — deselect
+      if (selectedSquare === sq) {
+        setSelectedSquare(null);
+        return;
+      }
+      // Legal destination — make the move
+      if (legalDests.has(sq)) {
+        onMove?.(selectedSquare, sq);
+        setSelectedSquare(null);
+        return;
+      }
+      // Clicked another of your own pieces — switch selection
+      if (isOwnPiece(piece)) {
+        setSelectedSquare(sq);
+        return;
+      }
+      // Anything else — deselect
+      setSelectedSquare(null);
+      return;
+    }
+
+    // No selection yet — try to select this piece
+    if (isOwnPiece(piece)) {
+      setSelectedSquare(sq);
+    }
+  };
+
+  // ─────────────────────── drag-and-drop (kept for desktop muscle memory) ─────
   const [dragFrom, setDragFrom] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleDragStart = (sq: string, e: React.DragEvent) => {
     if (!draggable) return;
+    if (!isOwnPiece(pieceAt(sq))) return;
     setDragFrom(sq);
+    setSelectedSquare(sq); // also light up legal-dest indicators while dragging
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', sq);
-    // Tiny transparent ghost
     const img = new Image();
     img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>';
     e.dataTransfer.setDragImage(img, 0, 0);
@@ -69,6 +148,7 @@ export function ChessBoard({ fen, theme, highlightFrom, highlightTo, draggable, 
     const from = e.dataTransfer.getData('text/plain') || dragFrom;
     setDragFrom(null);
     setDragOver(null);
+    setSelectedSquare(null);
     if (!from || from === sq) return;
     onMove?.(from, sq);
   };
@@ -98,11 +178,17 @@ export function ChessBoard({ fen, theme, highlightFrom, highlightTo, draggable, 
           const isTo = sq === highlightTo;
           const isCheckSq = sq === kingInCheckSq;
           const isDragOver = sq === dragOver;
+          const isSelected = sq === selectedSquare;
+          const isLegalDest = legalDests.has(sq);
+          const isCaptureDest = captureDests.has(sq);
+
+          const interactive = draggable && (isOwnPiece(piece) || isLegalDest);
 
           return (
             <div
               key={sq}
               data-sq={sq}
+              onClick={() => handleSquareClick(sq)}
               onDragOver={(e) => handleDragOver(sq, e)}
               onDrop={(e) => handleDrop(sq, e)}
               onDragLeave={() => setDragOver((s) => (s === sq ? null : s))}
@@ -112,6 +198,7 @@ export function ChessBoard({ fen, theme, highlightFrom, highlightTo, draggable, 
                 isTo ? 'sq-to' : '',
                 isCheckSq ? 'sq-check' : '',
                 isDragOver ? 'sq-highlight' : '',
+                interactive ? 'cursor-pointer' : '',
               ].join(' ')}
               style={{
                 background: isLight ? theme.light : theme.dark,
@@ -120,7 +207,7 @@ export function ChessBoard({ fen, theme, highlightFrom, highlightTo, draggable, 
               {/* file / rank labels */}
               {fileIdx === 0 && (
                 <span
-                  className="absolute top-0.5 left-1 text-[10px] font-mono opacity-50"
+                  className="absolute top-0.5 left-1 text-[10px] font-mono opacity-50 pointer-events-none"
                   style={{ color: isLight ? '#000' : '#fff' }}
                 >
                   {flipped ? rankIdx + 1 : 8 - rankIdx}
@@ -128,11 +215,48 @@ export function ChessBoard({ fen, theme, highlightFrom, highlightTo, draggable, 
               )}
               {rankIdx === 7 && (
                 <span
-                  className="absolute bottom-0.5 right-1 text-[10px] font-mono opacity-50"
+                  className="absolute bottom-0.5 right-1 text-[10px] font-mono opacity-50 pointer-events-none"
                   style={{ color: isLight ? '#000' : '#fff' }}
                 >
                   {flipped ? FILES[7 - fileIdx] : FILES[fileIdx]}
                 </span>
+              )}
+
+              {/* Selected square overlay */}
+              {isSelected && (
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ background: 'rgba(212, 170, 77, 0.28)' }}
+                />
+              )}
+
+              {/* Legal destination indicator (dot for empty, ring for capture) */}
+              {isLegalDest && !isCaptureDest && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div
+                    className="rounded-full"
+                    style={{
+                      width: '32%',
+                      height: '32%',
+                      background: 'rgba(212, 170, 77, 0.55)',
+                      boxShadow: '0 0 12px rgba(212, 170, 77, 0.35)',
+                    }}
+                  />
+                </div>
+              )}
+              {isCaptureDest && (
+                <div
+                  className="absolute pointer-events-none"
+                  style={{
+                    top: '4%',
+                    left: '4%',
+                    right: '4%',
+                    bottom: '4%',
+                    borderRadius: '50%',
+                    border: '4px solid rgba(212, 170, 77, 0.7)',
+                    boxShadow: '0 0 14px rgba(212, 170, 77, 0.4)',
+                  }}
+                />
               )}
 
               <AnimatePresence mode="popLayout">
@@ -146,7 +270,7 @@ export function ChessBoard({ fen, theme, highlightFrom, highlightTo, draggable, 
                     transition={{ type: 'spring', stiffness: 380, damping: 28 }}
                     draggable={draggable}
                     onDragStart={(e) => handleDragStart(sq, e as unknown as React.DragEvent)}
-                    className={`cursor-${draggable ? 'grab' : 'default'} pointer-events-auto`}
+                    className={`${interactive ? 'cursor-pointer' : 'cursor-default'} pointer-events-auto`}
                     style={{ filter: 'drop-shadow(0 3px 5px rgba(0,0,0,0.5))' }}
                   >
                     <PieceGlyph piece={piece} theme={theme} />
