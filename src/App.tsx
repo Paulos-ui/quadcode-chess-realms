@@ -458,12 +458,13 @@ function LegendsScreen({ themeName, onThemeChange, onBack }: LegendsScreenProps)
             <div className="space-y-5">
               <div className="parchment rounded-2xl p-4 md:p-5">
                 <ChessBoard
-                  fen={boardFen}
+                fen={boardFen}
                   theme={theme}
                   highlightFrom={lastMove?.from}
                   highlightTo={lastMove?.to}
                   draggable={true}
-              />
+                />
+              </div>
               <GameControls game={game} onToggleBattle={() => {}} battleOn={false} />
               <CommentaryFeed game={active} parsed={game.parsed} ply={game.ply} />
             </div>
