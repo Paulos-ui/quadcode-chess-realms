@@ -161,7 +161,134 @@ The Shadow King resigns by standing up. He bows. He has been mated. He has been 
 Jayking lifts his head. The crowd sees his face for the first time. He smiles. The drums get louder.`,
   };
 
-  return stories[game.id] || `${game.title}. ${game.year}. A board. Two souls. A war that ended in ${game.result === '1-0' ? 'white\'s' : game.result === '0-1' ? 'black\'s' : 'a shared'} victory. Someday they will make a film. For now, replay the moves and feel it for yourself.`;
+  return stories[game.id] || dynamicFallbackLore(game);
+}
+
+function dynamicFallbackLore(game: FamousGame): string {
+  // Used for any game without a hard-coded story — user-played games and custom PGNs.
+  const youWon =
+    (game.white === 'You' && game.result === '1-0') ||
+    (game.black === 'You' && game.result === '0-1');
+  const youLost =
+    (game.white === 'You' && game.result === '0-1') ||
+    (game.black === 'You' && game.result === '1-0');
+  const isDraw = game.result === '1/2-1/2';
+  const youArePlaying = game.white === 'You' || game.black === 'You';
+  const opponent = game.white === 'You' ? game.black : game.white;
+  const vsHuman = opponent === 'Friend';
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // Friend / multiplayer narratives — warmer, more about the human across the board
+  // ────────────────────────────────────────────────────────────────────────────
+  if (vsHuman && youArePlaying && youWon) {
+    return `Two friends. One board. One winner. Tonight, that was you.
+
+Somewhere across the country — across the city, across the world, across nothing more than a wifi signal — your friend opened the same site, typed the same code, and the connection between two people who don't share a room became a chess game.
+
+The first moves were polite, the way games between friends always start. A pawn moved, a knight developed, a few jokes flew across the chat. You knew their habits — you've watched them play before. They knew yours. The position was a conversation.
+
+Then somewhere in the middlegame, the conversation got serious. They committed to a plan. You found a flaw in it — three moves later, in the abstract, somewhere on a diagonal they hadn't accounted for. You played the move. They sat with it. The position twitched.
+
+And then, slowly, you outplayed them. Not by force. Not by genius. By patience. By understanding the position better than they did, square by square, until there was nowhere left for their king to go that you hadn't already considered.
+
+When the final move dropped, there was a moment of silence on both sides of the connection. Two people, looking at the same screen, in different rooms, both knowing the same thing: *that was a good game.*
+
+You won. They won too, in a way — they got to play it. That's chess. That's friendship. That's the whole point.
+
+Roll credits. Send them a rematch.`;
+  }
+
+  if (vsHuman && youArePlaying && youLost) {
+    return `Some losses sting. Some losses teach. The best losses do both.
+
+Tonight, you sat down at a chessboard with a friend — same connection, different rooms, same hour of the night. You both knew what was coming. You always know what's coming with the people you've played a hundred times before. And tonight, you both played to win.
+
+You played well. The opening was sharp. The middlegame had moments — real moments — where the position bent in your favor and you could *feel* the gravity of the win pulling. But chess, like friendship, is long. The position bent back. Then it bent further. Then it broke.
+
+Your friend played a quiet move. A move that looked like nothing. You looked at it for a second and the second became four. By the time you understood it, the position was already gone. They had seen something you hadn't, and they had timed it perfectly.
+
+You played out the loss because you respect the game. They played out the win because they respect you. And when the king fell, they typed something dumb into the chat. You typed something dumb back. Two friends, a chessboard, a game decided by inches, a friendship deeper than scores.
+
+This is the kind of loss you remember the next time. The next time, you find the move. The next time, it tips your way. And on that day, somewhere in a server room you'll never see, the rematch line in the database will say: *the underdog returned.*
+
+Save the game. Study it. Send them a rematch.`;
+  }
+
+  if (vsHuman && youArePlaying && isDraw) {
+    return `Two friends, two minds, one board, no winner. Tonight, the game ended where it began — equal.
+
+You sat down across from a friend, the way friends do. You both played sharp. You both played long. The middlegame had teeth on both sides — every plan met its match, every threat met its parry, every advance met its retreat. The position evolved like a conversation between two people who finish each other's sentences.
+
+The endgame whittled down to a position neither of you could break. You probed. They probed. Both of you saw the same fortress and both of you knew there was no key. And so, with mutual respect and a small smile somewhere on each end of the connection, the game was halved.
+
+A draw between friends is its own kind of victory. It's the universe saying: *you two are evenly matched, and that's a beautiful thing.* Save the game. The next one decides it.`;
+  }
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // AI opponent narratives
+  // ────────────────────────────────────────────────────────────────────────────
+  if (youArePlaying && youWon) {
+    return `The board did not see it coming.
+
+Tonight, in a glowing chamber at the edge of the digital realm, you sat across from the ${opponent} — an opponent without a face, without a heartbeat, without a doubt in the world that it would win. The chamber was silent. The clock ticked. The first pawn moved, and the world held its breath.
+
+Move by move, you fought. You traded blood for tempo. You let pieces fall because you saw further down the river of the position than your opponent did. There were moments — there always are — when the ${opponent}'s calculation crashed over your position like a wave, and you stood there, your knights surrounded, your queen exposed, and you remembered what every chess player learns the hard way: the game is not lost until it is *over.*
+
+Then came the turning point. A move that did not look like a move. A quiet square, a piece reorganizing, a tempo nobody but you understood. The ${opponent} replied confidently. It did not see it. *It did not see it.* And from that moment, the position was no longer a battlefield. It was a trap. Your trap. Your design.
+
+When the final move landed, the engine's evaluation didn't flicker — it broke. ${game.result === '1-0' ? 'White' : 'Black'} stood tall over a fallen king and a board that, just minutes ago, had seemed lost.
+
+This was not a famous game. It will not appear in any textbook. No one will write a column about it. But somewhere in the lattice of every chess game ever played, there is now a small line of code that says: *On this day, in this realm, the human pulled it out.*
+
+You did not just beat the ${opponent}. You beat the idea of the ${opponent}. You beat the thing that said you couldn't.
+
+The crown is yours. The board is yours. The legend is yours.
+
+Roll credits.`;
+  }
+
+  if (youArePlaying && youLost) {
+    return `Every champion is forged in defeats they refuse to forget.
+
+The ${opponent} did not gloat. The ${opponent} cannot gloat. It simply played the position, move by move, like a tide that does not care if you are a swimmer or a god. You opened well — you always do — and for a stretch in the middlegame the position felt alive in your hands, as if the pieces were singing back to you.
+
+Then a moment. A single move. A move that, in the version of you that wins this game, you do not play. But you did. And from that square forward, the position began to slip — not collapse, not crash, but *slip*, the way time slips through the fingers of someone who is trying to live every second twice.
+
+The ${opponent} pressed. Quietly. Methodically. Without mercy because mercy is not a function it has been trained on. Your king grew lonelier. Your rooks lost their files. Your bishops, once spires, became spectators. The clock did not laugh. The clock did not need to.
+
+When the final move came, you saw it three plies away. You let it happen because there was nothing else to do, and because there is a kind of grace in walking willingly into the end of the story you began.
+
+The ${opponent} extended no hand. The ${opponent} does not have one. The screen blinked. A line of evaluation. A new prompt: *Play again?*
+
+You will. Because chess players are simply people who lose, and then lose again, and then one day — on a Tuesday, in a room nobody is watching — do not lose. And on that day, every game like this one will turn out to have been preparation.
+
+This was the loss that mattered. Mark it. Save it. Bow to it.
+
+Then go back to the board.`;
+  }
+
+  if (youArePlaying && isDraw) {
+    return `Some games end without a victor. They end with two warriors, exhausted, lowering their swords because the steel has nothing left to say.
+
+You sat across from the ${opponent} tonight. You played sharp. You played long. You played the kind of chess where every move is a small argument with eternity. The ${opponent} matched you. It always does. It traded when you wanted complications. It complicated when you wanted to trade. By the late middlegame the position had grown so thorny that even the silicon ghost behind the screen was choosing between equal moves.
+
+The endgame came down to a handful of pawns and a king that had nowhere to go but back to where it started. You traded, you advanced, you retreated, and at some point — neither of you marked it — the position became a *fortress*. Neither side could win without losing. So neither side did.
+
+When the draw was finalized, the board sat there in silence, asymmetrical and beautiful, like a poem that ends mid-line because the line was the point.
+
+This is not a defeat. This is not a triumph. This is the chess gods, briefly, balancing the scale.
+
+There is honor here. Remember it.`;
+  }
+
+  // Custom PGN (not user-played) — generic dramatic frame
+  return `${game.title}. ${game.year}.
+
+A board. Two souls. Sixty-four squares, but only one truth: in this game, played in this place at this time, something occurred that will not occur again. The result reads ${game.result}. The names read ${game.white} and ${game.black}. But the *story* — the story is in the silence between the moves, in the breath one of them took before sliding a bishop across a long diagonal, in the moment the other one knew, three plies in advance, that it was over.
+
+Replay the moves. Listen to the score. Watch the pieces and let your eye land on the ones that the players were thinking about three turns before they were touched.
+
+Somewhere in this game, there is a moment of brilliance. Find it. That is the movie.`;
 }
 
 // ────────────────────────────────────────────────────────────────────

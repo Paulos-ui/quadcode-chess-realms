@@ -1,39 +1,73 @@
 # Jayking's Chess Realms ♟️
 
-> **From the board to the big screen  powered by Quadcode AI**
+> **Play chess. Win, lose, or draw. Watch your game become a movie.**
 
-A cinematic chess lore explorer built for the **Quadcode AI Hackathon 2026**. Pick a legendary chess game and instantly get an epic movie-script story, a custom-themed board, a procedurally composed orchestral soundtrack, and a 15-second cinematic replay video  all generated in your browser.
+Built for the **Quadcode AI Hackathon 2026**. A real chess engine in your browser, peer-to-peer multiplayer with no servers, and a cinematic post-game replay that turns every game you play into a 60-second story with custom lore, an orchestral soundtrack, and a sharable 15-second highlight clip.
 
 ![hero](docs/screenshot.png)
-
 ---
-## ✨ What it does
 
-- **🏛️ Famous Legends Library** : 4 pre-loaded masterpieces with verified PGNs:
-  - The Immortal Game (Anderssen vs Kieseritzky, 1851)
-  - Kasparov vs Deep Blue, Game 6 (1997)
-  - The Game of the Century (Byrne vs Fischer, 1956)
-  - **The Jayking Special** : a dramatic Légal-style smothered mate
-- **♟️ Paste Any PGN** : drop in a game from your phone, watch it become legend
-- **🎬 Cinematic Lore** : 300–400 word movie-script story generated for every game
-- **💬 Live AI Commentary** : every move gets a one-liner ("The bishop seals the trap…")
-- **🎨 4 Board Realms** : Royal UK, Cyberpunk, Fantasy, Classic — each with custom piece styles
-- **🎵 60-Second Procedural Soundtrack** : tense strings, deep drums, bell climax (Tone.js, fully synthesized in-browser)
-- **📽️ 15-Second Cinematic Video** : slow-motion gameplay with camera shake, scanlines, victory burst — exports as `.webm`
-- **⚔️ Mini Battle Mode** : play against a random-move AI from any position
-- **🎯 Share to X** : pre-filled hype tweet with `#QuadcodeHackathon`
+## What it does
 
-## 🧠 Bring Your Own Key (Optional)
+**Play vs an AI** — six skill levels from Pawn (~600 ELO) to Grandmaster (~2000+). Real negamax engine with alpha-beta pruning, piece-square tables, quiescence search, and iterative deepening on a time budget. Plays in your browser. No backend.
 
-Out of the box, every feature works using **hand-crafted bundled writing** and **procedural generation**. For *live* AI lore + commentary, click the **⚙️ settings icon** (top-right) and paste an [quadcode API key](https://quadcode.ai/). It's stored only in your browser's `localStorage`.
+**Play a friend, peer-to-peer** — one of you creates a game, gets a 6-character code, shares it. The other types the code (or clicks an invite link). You're playing over a direct WebRTC connection. No servers, no accounts, no env vars.
+
+**The cinematic replay** — when the game ends, the app generates:
+- a 300–400 word movie-script story written for *your specific game* (win, loss, or draw, vs AI or vs friend)
+- a per-move commentary feed
+- a 60-second procedural orchestral soundtrack (Tone.js, in-browser)
+- a 15-second cinematic video export with slow-motion playback, camera shake, scanlines, and a victory burst
+- four selectable board themes
+- one-click share to X with a pre-filled hype post
+
+**Study Legends mode** — replay four hand-curated masterpieces (Immortal Game, Kasparov vs Deep Blue G6, Byrne vs Fischer, and the Jayking Special) with the same cinematic toys applied.
+
+**Optional accounts** — sign up with email + password to unlock a persistent display name (shows on the opponent banner) and automatic game history. Every completed game saves to your archive with PGN, result, opponent, and date. Click any past game in **Your Games** to replay it as a movie. See [SETUP.md](./SETUP.md) for the 5-minute Supabase setup. **The app is fully playable without an account** — accounts are purely additive.
+
+## The chess engine
+
+Hand-written in TypeScript. Key features:
+
+- Negamax with alpha-beta pruning
+- Iterative deepening with a per-skill time budget (100ms → 4.5s)
+- Bounded quiescence search (max 6 plies of captures) at skill 3+
+- MVV-LVA move ordering for early cutoffs
+- Piece-square tables for positional eval
+- Mate-distance preference (no jitter at mate scores so the engine never gets cute about a winning move)
+- All running on the main thread with `requestAnimationFrame` deferral so the UI stays responsive
+
+Skill speed reference on standard hardware:
+
+| Skill | Name | ELO | Move time |
+|---|---|---|---|
+| 0 | Pawn | ~600 | instant |
+| 1 | Knight | ~900 | ~150ms |
+| 2 | Bishop | ~1200 | ~300ms |
+| 3 | Rook | ~1500 | ~1.5s |
+| 4 | Queen | ~1800 | ~3s |
+| 5 | Grandmaster | ~2000+ | ~5s |
+
+## Multiplayer architecture
+
+Uses [PeerJS](https://peerjs.com/) for WebRTC peer-to-peer with the free public broker for signaling. No backend you have to operate.
+
+- Host generates a random 6-character code, registers their peer ID as `jkcr-<CODE>` with the broker.
+- Joiner types the code, dials the host's peer ID via the broker, establishes a direct WebRTC data channel.
+- Both sides exchange typed messages: `gameStart`, `move`, `resign`, `drawOffer`, `drawAccept`, `drawDecline`, `rematch`.
+- Each side maintains its own chess.js instance. The protocol sends only move deltas, never full board state.
+- Game-end is detected deterministically on both sides from the move sequence.
+- Invite link support: `?join=CODE` in the URL auto-routes to the multiplayer screen with the code prefilled.
+
+## Bring your own key (optional)
+
+Out of the box, every feature works using **hand-crafted bundled writing**. For *live* AI lore generation tailored to your specific game's moves, open the settings icon (top-right), paste an [Anthropic API key](https://console.anthropic.com/), and it's stored in your browser's `localStorage` only.
 
 The app calls the Anthropic Messages API directly from the browser using the `anthropic-dangerous-direct-browser-access` header. Use a key with spend limits.
 
 ---
 
-## 🚀 Quick Start
-
-### Local
+## Quick start
 
 ```bash
 npm install
@@ -42,86 +76,63 @@ npm run dev
 
 Opens at `http://localhost:5173`.
 
-### Production Build
+### Production build
 
 ```bash
 npm run build
 npm run preview
 ```
 
-### Deploy to Vercel (one-click)
+### Deploy
 
-```bash
-# install Vercel CLI if needed
-npm i -g vercel
+Drops on Vercel / Netlify / Cloudflare Pages out of the box. No env vars required.
 
-# from project root
-vercel --prod
-```
+**Optional:** to enable accounts + game history, follow [SETUP.md](./SETUP.md) and set two env vars: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. Free Supabase tier handles 50k MAU.
 
-Or just push to GitHub and import the repo at [vercel.com/new](https://vercel.com/new). **No environment variables required** — everything runs client-side. The included `vercel.json` handles SPA routing.
+## Tech stack
 
----
+- **Vite + React 18 + TypeScript**
+- **Tailwind CSS v3** for styling (with custom royal theme tokens)
+- **chess.js** for move generation and legality
+- **PeerJS** for WebRTC peer-to-peer
+- **Tone.js** for procedural orchestral soundtrack + move SFX
+- **Framer Motion** for board piece animations and screen transitions
+- **Lucide React** for icons
 
-## 🛠️ Tech Stack
-
-| Layer | Tool |
-|---|---|
-| Framework | Vite + React 18 + TypeScript |
-| Styling | Tailwind CSS 3, Framer Motion |
-| Icons | Lucide React |
-| Chess logic | chess.js |
-| Audio | Tone.js (procedural orchestra) |
-| Video | Canvas + MediaRecorder (WebM VP9) |
-| AI text | Anthropic Messages API (optional) |
-
-## 📁 Folder Structure
+## Project structure
 
 ```
 src/
-├── App.tsx                    # Main shell & layout
-├── main.tsx                   # React entry
-├── index.css                  # Tailwind + custom utilities
-├── types.ts                   # Shared TS types
-├── data/
-│   └── famousGames.ts         # 4 pre-loaded games + PGNs
-├── hooks/
-│   ├── useChessGame.ts        # Replay state machine + battle mode
-│   └── useLocalStorage.ts
-├── lib/
-│   ├── ai-client.ts           # Anthropic API + bundled fallback writing
-│   ├── chess-utils.ts         # PGN parsing helpers
-│   ├── commentary-bank.ts     # Procedural commentary corpus
-│   ├── music-engine.ts        # Tone.js orchestral generator
-│   ├── theme-engine.tsx       # 4 board realms + piece glyphs
-│   └── video-engine.ts        # Canvas + MediaRecorder pipeline
-└── components/
-    ├── Hero.tsx
-    ├── ParticleBackground.tsx
-    ├── GameSelector.tsx
-    ├── ChessBoard.tsx
-    ├── GameControls.tsx
-    ├── CommentaryFeed.tsx
-    ├── LorePanel.tsx
-    ├── ThemeGenerator.tsx
-    ├── MusicPlayer.tsx
-    ├── VideoGenerator.tsx
-    ├── ShareButtons.tsx
-    ├── Footer.tsx
-    └── BadgeQuadcode.tsx
+├─ App.tsx                       # screen router (setup → play → cinema → multiplayer → legends)
+├─ components/
+│  ├─ PlaySetup.tsx              # homepage: skill + color picker, two CTAs
+│  ├─ PlayBoard.tsx              # active game UI (generic: AI or P2P)
+│  ├─ MultiplayerScreen.tsx      # lobby + active P2P game
+│  ├─ GameOverModal.tsx          # cinematic win/loss/draw moment
+│  ├─ PostGameCinema.tsx         # cinematic replay of YOUR game
+│  ├─ ChessBoard.tsx             # the 8×8 grid with drag-drop, animations
+│  ├─ LorePanel.tsx              # story + per-move commentary
+│  ├─ ThemeGenerator.tsx         # 4 board themes
+│  ├─ MusicPlayer.tsx            # 60s orchestral soundtrack
+│  ├─ VideoGenerator.tsx         # 15s cinematic .webm export
+│  ├─ ShareButtons.tsx           # pre-filled X share
+│  └─ GameSelector.tsx           # famous games picker (Study Legends)
+├─ hooks/
+│  ├─ usePlayGame.ts             # active game vs AI
+│  ├─ useNetworkGame.ts          # active game vs friend (P2P)
+│  ├─ useChessGame.ts            # passive replay (for famous games)
+│  └─ useLocalStorage.ts
+└─ lib/
+   ├─ chess-ai.ts                # the engine
+   ├─ peer-game.ts               # PeerJS connection manager
+   ├─ ai-client.ts               # Anthropic Messages API + bundled stories
+   ├─ sfx.ts                     # Tone.js move/capture/check/mate SFX
+   ├─ music-engine.ts            # Tone.js 60s orchestral score
+   ├─ video-engine.ts            # Canvas + MediaRecorder for clip export
+   ├─ theme-engine.tsx           # 4 board themes
+   ├─ commentary-bank.ts         # per-move commentary
+   └─ chess-utils.ts
 ```
-
-## 🎬 Demo Flow
-
-1. Land on hero → see floating chess pieces drift over an aurora gradient
-2. Tap **"The Jayking Special"** quick-card → scrolls into the stage
-3. Press **play** → board animates through the smothered-mate combination
-4. Hit **Generate Cinematic Lore** → 350-word movie pitch unfolds
-5. Switch realms → board becomes a neon cyberpunk grid in one click
-6. **Generate Epic Soundtrack** → 60s of cello + strings + bells starts
-7. **Generate 15s Cinematic Clip** → renders a downloadable WebM
-8. Toggle **Battle Mode** → finish the game yourself against a random-move AI
-9. **Post on X** → share your replay link with the hackathon tag
 
 ## 🧩 Built for #QuadcodeHackathon
 

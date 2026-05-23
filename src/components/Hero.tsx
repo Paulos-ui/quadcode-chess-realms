@@ -56,7 +56,7 @@ export function Hero({ onPickGame, onJumpToBrowser, onJumpToBattle }: Props) {
           </h1>
 
           <p className="mt-6 text-lg md:text-xl text-gold-100/70 max-w-2xl leading-relaxed">
-            From the board to the big screen — turn legendary chess battles into cinematic AI experiences with custom lore, dramatic soundtracks, and animated victory clips.
+            From the board to the big screen turn legendary chess battles into cinematic AI experiences with custom lore, dramatic soundtracks, and animated victory clips.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
