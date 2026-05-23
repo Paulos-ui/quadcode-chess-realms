@@ -153,6 +153,7 @@ export function PostGameCinema({
                   highlightFrom={lastMove?.from}
                   highlightTo={lastMove?.to}
                   flipped={playerColor === 'b'}
+                  draggable={false}
                 />
               </div>
               <GameControls game={game} onToggleBattle={() => {}} battleOn={false} />
