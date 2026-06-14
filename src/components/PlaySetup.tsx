@@ -57,7 +57,7 @@ export function PlaySetup({ skill, color, onSkillChange, onColorChange, onStart,
             Jayking's <span className="gold-shimmer">Chess Realms</span>
           </h1>
           <p className="text-base md:text-lg text-gold-100/70 max-w-xl mx-auto">
-            Play a real chess engine. Win, lose, or draw — every game becomes a cinematic movie afterward.
+            Play a real chess engine. Win, lose, or draw, every game becomes a cinematic movie afterward.
           </p>
         </motion.div>
 
