@@ -17,7 +17,7 @@ export function setStoredApiKey(k: string | null) {
  * If no key is configured, returns null and the caller falls back to bundled templates.
  *
  * NOTE: For production, requests should be proxied through a backend so the key isn't in the browser.
- * For this hackathon demo we expose an explicit "Bring your own key" field.
+ * For this demo we expose an explicit "Bring your own key" field.
  */
 export async function callClaude(prompt: string, maxTokens = 1024): Promise<string | null> {
   const key = getStoredApiKey();
@@ -136,13 +136,13 @@ The press will call it *The Game of the Century.* They are wrong only because th
 
 The boy walks home alone. Tomorrow, he has school.`,
 
-    'jayking-special': `Lagos. February 14, 2026. The drums begin at sunset.
+    'jayking-special': `London. February 14, 2026. The bells begin at sunset.
 
-The Lagos Royal Invitational has been held for one year and is already a legend. They built the venue on the lagoon — glass and brass over black water, a stadium shaped like an Ife mask. Inside, a single board lit from above by a beam so white it looks like a verdict from heaven. The crowd: ten thousand strong. The stakes: a kingdom's pride.
+The London Royal Invitational has been held for one year and is already a legend. They built the venue on the Thames — glass and brass over dark water, a stadium shaped like a crown. Inside, a single board lit from above by a beam so white it looks like a verdict from heaven. The crowd: ten thousand strong. The stakes: a kingdom's pride.
 
 Across the board: a man known only as *The Shadow King.* No country listed. No federation. A career of dismantling grandmasters in blitz games on rooftops from Moscow to Mumbai. They say he plays in silence. They say he has never been mated.
 
-Opposite him sits Jayking. Lagos boy. Self-taught. The hood of his agbada is pulled forward, gold thread catching the spotlight. He is twenty-one. He has been preparing for this game his whole life.
+Opposite him sits Jayking. London boy. Self-taught. The collar of his long coat is turned up, gold thread catching the spotlight. He is twenty-one. He has been preparing for this game his whole life.
 
 1. e4. The crowd roars. 2. Nf3 d6 — Philidor's Defense, an old line, a quiet line. 3. Bc4. The bishop slides into the diagonal like a leopard easing onto a branch. The Shadow King plays Bg4, pinning the knight. He has played this position a thousand times. He is, for the first time in years, comfortable.
 
@@ -154,11 +154,11 @@ He shouldn't be.
 
 7. Nd5. Mate.
 
-Silence. Then a sound like an ocean breaking. The drums rise. Somewhere in the rafters someone is screaming Jayking's name and somewhere on the lagoon a fisherman lifts his head and listens. Seven moves. *Seven moves.* From the streets of Surulere to the throne of the chess world, by way of a 17th-century trap and a 21st-century heart.
+Silence. Then a sound like an ocean breaking. The bells rise. Somewhere in the rafters someone is screaming Jayking's name and somewhere on the Thames a boatman lifts his head and listens. Seven moves. *Seven moves.* From the streets of Hackney to the throne of the chess world, by way of a 17th-century trap and a 21st-century heart.
 
 The Shadow King resigns by standing up. He bows. He has been mated. He has been *seen.*
 
-Jayking lifts his head. The crowd sees his face for the first time. He smiles. The drums get louder.`,
+Jayking lifts his head. The crowd sees his face for the first time. He smiles. The bells get louder.`,
   };
 
   return stories[game.id] || dynamicFallbackLore(game);

@@ -4,7 +4,7 @@ import { Sparkles } from 'lucide-react';
 export function BadgeQuadcode() {
   return (
     <motion.a
-      href="https://x.com/intent/tweet?text=%23QuadcodeHackathon"
+      href="https://x.com/intent/tweet?text=%23Superteam"
       target="_blank"
       rel="noopener noreferrer"
       initial={{ opacity: 0, y: 30 }}
@@ -16,11 +16,11 @@ export function BadgeQuadcode() {
                  bg-royal-950/80 backdrop-blur border border-gold-300/30 text-gold-100
                  shadow-[0_8px_32px_rgba(212,170,77,0.25)] hover:border-gold-300/60 transition
                  text-xs font-mono"
-      aria-label="Made with Quadcode AI"
+      aria-label="Built for Superteam"
     >
       <Sparkles className="w-3.5 h-3.5 text-gold-300 animate-pulse" />
       <span>
-        Made with <span className="text-gold-200 font-semibold">Quadcode</span>
+        Built for <span className="text-gold-200 font-semibold">Superteam</span>
       </span>
     </motion.a>
   );

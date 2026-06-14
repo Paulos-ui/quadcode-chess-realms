@@ -14,9 +14,9 @@ export function ShareButtons({ game }: Props) {
 
   const tweet = `Just turned ${game.title} (${game.year}) into a cinematic AI experience on Jayking's Chess Realms ♟️🔥
 
-Built in one shot with @QuadcodeAI — lore, soundtrack, custom board, full replay video. From notation to legend.
+Built for @Superteam — lore, soundtrack, custom board, full replay video. From notation to legend.
 
-#QuadcodeHackathon #Hackathon2026
+#Superteam
 ${url}`;
 
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`;
@@ -71,7 +71,7 @@ ${url}`;
         </motion.button>
       </div>
       <p className="text-[11px] text-gold-200/50 mt-3 font-mono">
-        Pre-filled with <span className="text-gold-300">#QuadcodeHackathon</span> + this game's title.
+        Pre-filled with <span className="text-gold-300">#Superteam</span> + this game's title.
       </p>
     </div>
   );

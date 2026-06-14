@@ -32,13 +32,13 @@ export function Footer() {
       <div className="border-t border-gold-300/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs font-mono text-gold-200/60">
           <div className="inline-flex items-center gap-2">
-            Built in <span className="text-gold-200 font-semibold">Quadcode AI</span> •{' '}
+            Built for <span className="text-gold-200 font-semibold">Superteam</span> •{' '}
             <span className="text-gold-200 font-semibold">Jayking</span> ♟️ •{' '}
-            <span className="text-gold-300">#Hackathon2026</span>
+            <span className="text-gold-300">London, UK</span>
           </div>
           <div className="inline-flex items-center gap-1.5">
-            Made with <Heart className="w-3 h-3 fill-nigeria-green text-nigeria-green" /> in Lagos
-            <span className="ml-1">🇳🇬</span>
+            Made with <Heart className="w-3 h-3 fill-red-500 text-red-500" /> in London
+            <span className="ml-1">🇬🇧</span>
           </div>
         </div>
       </div>

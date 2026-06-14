@@ -51,7 +51,7 @@ export function PlaySetup({ skill, color, onSkillChange, onColorChange, onStart,
         >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold-300/10 border border-gold-300/20 text-xs font-mono uppercase tracking-[0.3em] text-gold-200 mb-5">
             <Sparkles className="w-3 h-3" />
-            Quadcode Hackathon
+            Building for Superteam
           </div>
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-gold-100 leading-[0.95] mb-5">
             Jayking's <span className="gold-shimmer">Chess Realms</span>

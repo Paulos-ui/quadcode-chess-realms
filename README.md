@@ -2,7 +2,7 @@
 
 > **Play chess. Win, lose, or draw. Watch your game become a movie.**
 
-Built for the **Quadcode AI Hackathon 2026**. A real chess engine in your browser, peer-to-peer multiplayer with no servers, and a cinematic post-game replay that turns every game you play into a 60-second story with custom lore, an orchestral soundtrack, and a sharable 15-second highlight clip.
+Built for **Superteam**. A real chess engine in your browser, peer-to-peer multiplayer with no servers, and a cinematic post-game replay that turns every game you play into a 60-second story with custom lore, an orchestral soundtrack, and a sharable 15-second highlight clip.
 
 ![hero](docs/screenshot.png)
 ---
@@ -134,8 +134,8 @@ src/
    └─ chess-utils.ts
 ```
 
-## 🧩 Built for #QuadcodeHackathon
+## 🧩 Built for Superteam
 
 This is a single self-contained SPA — no server, no environment variables, no signups. It runs entirely in the browser and demonstrates how an agentic workspace can stitch together text, design, audio, and video into one cohesive experience.
 
-**Built in Quadcode AI • Jayking ♟️ • #Hackathon2026**
+**Built for Superteam • Jayking ♟️ • London, UK**

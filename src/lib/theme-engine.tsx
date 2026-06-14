@@ -3,7 +3,7 @@ import type { BoardTheme, ThemeName } from '../types';
 export const THEMES: Record<ThemeName, BoardTheme> = {
   'royal-nigerian': {
     name: 'royal-nigerian',
-    label: 'Royal Nigerian',
+    label: 'Royal London',
     light: 'linear-gradient(135deg, #f9eccf 0%, #e9c46a 100%)',
     dark: 'linear-gradient(135deg, #0c5c36 0%, #053a22 100%)',
     border: 'rgba(244,197,66,0.55)',
@@ -12,7 +12,7 @@ export const THEMES: Record<ThemeName, BoardTheme> = {
     pieceLight: '#fff8e7',
     pieceDark: '#0b0a10',
     accent: '#008751',
-    description: 'Emerald palace squares, ivory & onyx kings. Inspired by Lagos at dusk.',
+    description: 'Emerald palace squares, ivory & onyx kings. Inspired by London at dusk.',
   },
   cyberpunk: {
     name: 'cyberpunk',

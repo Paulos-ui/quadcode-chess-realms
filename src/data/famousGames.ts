@@ -73,18 +73,18 @@ export const FAMOUS_GAMES: FamousGame[] = [
   {
     id: 'jayking-special',
     title: 'The Jayking Special',
-    subtitle: 'A Lagos Gambit, 2026',
+    subtitle: 'A London Gambit, 2026',
     year: 2026,
-    white: 'Jayking (Lagos)',
+    white: 'Jayking (London)',
     black: 'The Shadow King',
     result: '1-0',
     blurb:
-      'A dramatic Nigerian-inspired masterpiece — a King\'s Gambit storm rising from Lagos, ending in a smothered mate.',
+      'A dramatic British-inspired masterpiece — a King\'s Gambit storm rising from London, ending in a smothered mate.',
     defaultTheme: 'royal-nigerian',
-    flag: '🇳🇬',
+    flag: '🇬🇧',
     // A real, legal, dramatic miniature culminating in a smothered mate (Légal-style trap into Philidor's smother).
-    pgn: `[Event "Lagos Royal Invitational"]
-[Site "Eko, Lagos NGA"]
+    pgn: `[Event "London Royal Invitational"]
+[Site "London, ENG"]
 [Date "2026.02.14"]
 [Round "Final"]
 [White "Jayking"]
@@ -93,6 +93,6 @@ export const FAMOUS_GAMES: FamousGame[] = [
 
 1.e4 e5 2.Nf3 d6 3.Bc4 Bg4 4.Nc3 g6 5.Nxe5 Bxd1 6.Bxf7+ Ke7 7.Nd5# 1-0`,
     loreSeed:
-      'Lagos at dusk. Drums echo across Eko. A young Nigerian prince sets a trap older than the Atlantic, and in seven moves the throne falls.',
+      'London at dusk. Bells echo across the Thames. A young prince sets a trap older than the Atlantic, and in seven moves the throne falls.',
   },
 ];

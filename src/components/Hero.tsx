@@ -38,7 +38,7 @@ export function Hero({ onPickGame, onJumpToBrowser, onJumpToBattle }: Props) {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold-300/30 bg-gold-300/5 text-xs uppercase tracking-widest text-gold-200 mb-6">
             <Sparkles className="w-3.5 h-3.5" />
-            Hackathon 2026 · Built in a weekend
+            Building for Superteam
           </div>
 
           <h1 className="font-display text-[clamp(2.6rem,7vw,5.4rem)] leading-[1.02] font-extrabold tracking-tight">
@@ -47,11 +47,7 @@ export function Hero({ onPickGame, onJumpToBrowser, onJumpToBattle }: Props) {
             <span className="text-gold-100/95">Chess Realms</span>
             <span className="ml-3 text-3xl md:text-4xl align-top">
               ♟️
-              <span className="inline-flex flex-col ml-1 align-middle h-7 w-7 rounded-sm overflow-hidden border border-gold-300/40">
-                <span className="flex-1 bg-nigeria-green" />
-                <span className="flex-1 bg-nigeria-white" />
-                <span className="flex-1 bg-nigeria-green" />
-              </span>
+              <span className="ml-1 align-middle">🇬🇧</span>
             </span>
           </h1>
 
